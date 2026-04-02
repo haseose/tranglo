@@ -1,0 +1,25 @@
+<header class="app-header" role="banner">
+  <div class="header-brand">
+    <a routerLink="/" class="brand-link" aria-label="Currency Exchange Rate Dashboard home">
+      <span class="brand-icon" aria-hidden="true">💱</span>
+      <span class="brand-name">FX Dashboard</span>
+    </a>
+  </div>
+
+  <nav class="header-nav" aria-label="Main navigation">
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+    <a routerLink="/trends" routerLinkActive="active" class="nav-link">Trends</a>
+    <a routerLink="/converter" routerLinkActive="active" class="nav-link">Converter</a>
+  </nav>
+
+  <div class="header-actions">
+    <mat-slide-toggle
+      [checked]="isDark()"
+      (change)="themeService.toggleTheme()"
+      [attr.aria-label]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      color="primary"
+    >
+      {{ isDark() ? '☀️ Light' : '🌙 Dark' }}
+    </mat-slide-toggle>
+  </div>
+</header>

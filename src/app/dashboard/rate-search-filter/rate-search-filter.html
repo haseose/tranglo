@@ -1,0 +1,39 @@
+<div class="search-filter-bar" role="search">
+  <div class="search-input-wrap">
+    <span class="search-icon" aria-hidden="true">🔍</span>
+    <input
+      type="search"
+      class="search-input"
+      placeholder="Search currency code or name…"
+      [value]="searchQuery()"
+      (input)="onSearchInput($event)"
+      aria-label="Search currencies"
+      autocomplete="off"
+    />
+    @if (searchQuery()) {
+      <button
+        class="clear-btn"
+        (click)="clearSearch()"
+        aria-label="Clear search"
+        type="button"
+      >✕</button>
+    }
+  </div>
+
+  <div class="filter-wrap">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Filter by</mat-label>
+      <mat-select
+        [value]="filterCurrency()"
+        (selectionChange)="onFilterChange($event.value)"
+        aria-label="Filter by currency"
+      >
+        <mat-option value="">All currencies</mat-option>
+        @for (currency of currencies; track currency.code) {
+          <mat-option [value]="currency.code">{{ currency.code }} — {{ currency.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+</div>

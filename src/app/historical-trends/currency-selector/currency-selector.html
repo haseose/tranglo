@@ -1,0 +1,32 @@
+<div class="currency-selector" role="group" [attr.aria-label]="'Select up to ' + maxSelections() + ' currencies'">
+  <div class="selector-header">
+    <span class="selector-label">Select currencies to compare</span>
+    <span class="selection-count" aria-live="polite">
+      {{ selectedCurrencies().length }}/{{ maxSelections() }} selected
+    </span>
+  </div>
+
+  <div class="currency-grid">
+    @for (currency of availableCurrencies(); track currency.code) {
+      @if (currency.code !== baseCurrency()) {
+        <button
+          type="button"
+          class="currency-pill"
+          [class.selected]="isSelected(currency.code)"
+          [class.disabled]="isDisabled(currency.code)"
+          [disabled]="isDisabled(currency.code)"
+          [attr.aria-pressed]="isSelected(currency.code)"
+          [style.border-color]="isSelected(currency.code)"
+          [style.color]="isSelected(currency.code)"
+          (click)="toggleCurrency(currency.code)"
+          [attr.title]="currency.name"
+        >
+          @if (isSelected(currency.code)) {
+            <span class="color-dot" aria-hidden="true"></span>
+          }
+          {{ currency.code }}
+        </button>
+      }
+    }
+  </div>
+</div>

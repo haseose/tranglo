@@ -1,0 +1,85 @@
+<div class="table-wrapper" role="region" aria-label="Currency exchange rates">
+
+  @if (isLoading()) {
+    <div class="table-loading" role="status" aria-label="Loading exchange rates">
+      <div class="spinner" aria-hidden="true"></div>
+      <p class="loading-text">Loading exchange rates&hellip;</p>
+    </div>
+  }
+
+  @if (error() && !isLoading()) {
+    <div class="table-error" role="alert">
+      <img src="assets/icons/warning.svg" width="16" height="16" alt="" aria-hidden="true" />
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  <div class="scroll-container" [class.hidden]="isLoading()">
+    <mat-table
+      [dataSource]="dataSource"
+      matSort
+      matSortActive="code"
+      matSortDirection="asc"
+      class="rates-mat-table"
+    >
+
+      <ng-container matColumnDef="code">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Currency</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <span class="currency-badge">{{ row.code }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let row" class="td-name">
+          {{ getCurrencyName(row.code) }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="rate">
+        <mat-header-cell *matHeaderCellDef mat-sort-header class="cell-right">Rate</mat-header-cell>
+        <mat-cell *matCellDef="let row" class="cell-right td-rate">
+          {{ row.rate | currencyFormat }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="comparison">
+        <mat-header-cell *matHeaderCellDef class="cell-right">Compared to Base</mat-header-cell>
+        <mat-cell *matCellDef="let row" class="cell-right">
+          <span class="comparison-text">
+            1&nbsp;{{ row.baseCurrency }}&nbsp;=&nbsp;{{ row.rate | currencyFormat }}&nbsp;{{ row.code }}
+          </span>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" />
+      <mat-row *matRowDef="let row; columns: displayedColumns;" />
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell td-empty" [attr.colspan]="displayedColumns.length">
+          <div class="empty-message" role="status" aria-live="polite">
+            <span aria-hidden="true">🔍</span>
+            <span>No currencies match your search.</span>
+          </div>
+        </td>
+      </tr>
+
+    </mat-table>
+  </div>
+
+  <div class="table-footer">
+    <span class="result-count" aria-live="polite" aria-atomic="true">
+      Showing {{ dataSource.filteredData.length }} of {{ dataSource.data.length }} currencies
+    </span>
+    <mat-paginator
+      [pageSizeOptions]="pageSizeOptions"
+      [pageSize]="10"
+      showFirstLastButtons
+      aria-label="Select page of exchange rates"
+    />
+  </div>
+
+</div>
+
+

@@ -1,0 +1,15 @@
+.offline-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
+  border-bottom: 2px solid var(--color-warning);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.offline-icon {
+  font-size: 1rem;
+}

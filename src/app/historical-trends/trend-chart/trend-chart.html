@@ -1,0 +1,23 @@
+<div class="chart-wrapper">
+  <!--
+    The canvas is always rendered so viewChild() stays defined after view init.
+    When there are no trends the empty-state overlay covers it visually.
+  -->
+  <canvas
+    #chartCanvas
+    class="chart-canvas"
+    [attr.aria-label]="ariaLabel()"
+    role="img"
+  ></canvas>
+
+  @if (!hasTrends()) {
+    <div class="chart-empty" aria-live="polite" aria-atomic="true">
+      <div class="chart-empty-icon" aria-hidden="true">
+        <img src="assets/icons/chart-line.svg" width="52" height="52" alt="" aria-hidden="true" />
+      </div>
+      <p class="chart-empty-text">
+        Select currencies above to view exchange rate trends
+      </p>
+    </div>
+  }
+</div>

@@ -1,0 +1,100 @@
+<div class="trends-page">
+
+  <header class="page-header">
+    <h1 class="page-title">Historical Trends</h1>
+    <p class="page-subtitle">
+      Compare exchange rate trends over the past 30 days for up to 3 currencies
+    </p>
+  </header>
+
+  <div class="trends-layout">
+
+    <section class="card controls-card" aria-label="Chart controls">
+      <div class="controls-row">
+        <div class="base-info">
+          <mat-form-field appearance="outline" class="base-select-field">
+            <mat-label>Base Currency</mat-label>
+            <mat-select
+              [value]="baseCurrency()"
+              (selectionChange)="onBaseCurrencyChange($event.value)"
+              aria-label="Select base currency"
+            >
+              @for (currency of allCurrencies; track currency.code) {
+                <mat-option [value]="currency.code">
+                  {{ currency.code }} — {{ currency.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <app-aggregation-toggle
+          [selected]="aggregation()"
+          (aggregationChange)="onAggregationChange($event)"
+        />
+      </div>
+    </section>
+
+    <section class="card chart-card" aria-label="Exchange rate trend chart">
+
+      @if (isLoading()) {
+        <div
+          class="loading-container"
+          role="status"
+          aria-label="Fetching exchange rates"
+        >
+          <div class="spinner" aria-hidden="true"></div>
+          <p class="loading-text">Fetching exchange rates&hellip;</p>
+        </div>
+
+      } @else if (error()) {
+        <div class="error-banner" role="alert">
+          <img
+            src="assets/icons/warning.svg"
+            class="error-icon"
+            width="16"
+            height="16"
+            alt=""
+            aria-hidden="true"
+          />
+          <p>{{ error() }}</p>
+        </div>
+
+      } @else if (selectedCurrencies().length === 0) {
+        <div class="empty-state" role="status" aria-live="polite">
+          <img
+            src="assets/icons/no-selection.svg"
+            class="empty-state-img"
+            width="120"
+            height="120"
+            alt="No currencies selected"
+          />
+          <p class="empty-state-text">
+            Select up to 3 currencies below to compare their exchange rate trends
+          </p>
+        </div>
+
+      } @else {
+        <app-trend-chart
+          [trends]="trends()"
+          [baseCurrency]="baseCurrency()"
+        />
+      }
+
+    </section>
+
+    <section
+      class="card selector-card"
+      aria-label="Select currencies to compare"
+    >
+      <app-currency-selector
+        [selectedCurrencies]="selectedCurrencies()"
+        [baseCurrency]="baseCurrency()"
+        [maxSelections]="3"
+        (selectionChange)="onCurrencySelectionChange($event)"
+      />
+    </section>
+
+  </div>
+
+</div>
+

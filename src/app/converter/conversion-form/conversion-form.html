@@ -1,0 +1,146 @@
+<div class="conversion-form-wrapper">
+
+  <div class="card form-card">
+    <form
+      class="form"
+      (submit)="$event.preventDefault()"
+      novalidate
+      aria-label="Currency conversion form"
+    >
+      <div class="form-row">
+
+        <div class="field-group field-group--amount">
+          <label for="conv-amount" class="field-label">Amount</label>
+          <input
+            id="conv-amount"
+            class="field-input"
+            type="number"
+            min="0.01"
+            step="any"
+            placeholder="1.00"
+            [value]="amount()"
+            (input)="onAmountChange($event)"
+            [attr.aria-invalid]="amount() <= 0 ? 'true' : 'false'"
+            aria-describedby="conv-amount-hint"
+            autocomplete="off"
+          />
+          <span id="conv-amount-hint" class="sr-only">Enter the amount to convert</span>
+        </div>
+
+        <div class="field-group field-group--from">
+          <mat-form-field appearance="outline" class="currency-select-field" subscriptSizing="dynamic">
+            <mat-label>From</mat-label>
+            <mat-select
+              [value]="fromCurrency()"
+              (selectionChange)="onFromCurrencyChange($event.value)"
+              aria-label="Source currency"
+            >
+              @for (currency of currencies; track currency.code) {
+                <mat-option [value]="currency.code">
+                  {{ currency.code }} — {{ currency.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="swap-wrapper" aria-hidden="false">
+          <button
+            type="button"
+            class="btn-swap"
+            (click)="onSwap()"
+            aria-label="Swap from and to currencies"
+            title="Swap currencies"
+          >
+            <span class="swap-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="field-group field-group--to">
+          <mat-form-field appearance="outline" class="currency-select-field" subscriptSizing="dynamic">
+            <mat-label>To</mat-label>
+            <mat-select
+              [value]="toCurrency()"
+              (selectionChange)="onToCurrencyChange($event.value)"
+              aria-label="Target currency"
+            >
+              @for (currency of currencies; track currency.code) {
+                <mat-option [value]="currency.code">
+                  {{ currency.code }} — {{ currency.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </form>
+
+    @if (error()) {
+      <div class="error-banner" role="alert" aria-live="assertive">
+        <img
+          src="assets/icons/warning.svg"
+          class="error-icon"
+          width="16"
+          height="16"
+          alt=""
+          aria-hidden="true"
+        />
+        {{ error() }}
+      </div>
+    }
+
+  </div>
+
+  @if (formattedResult(); as result) {
+    <div
+      class="card result-card"
+      role="region"
+      aria-label="Conversion result"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <div class="result-main">
+        <div class="result-amount result-amount--from">
+          <span class="result-value">{{ result.fromDisplay }}</span>
+        </div>
+
+        <div class="result-equals" aria-hidden="true">
+          <img
+            src="assets/icons/equals.svg"
+            width="22"
+            height="22"
+            alt=""
+            aria-hidden="true"
+          />
+        </div>
+
+        <div class="result-amount result-amount--to">
+          <span class="result-value result-value--highlight">{{ result.toDisplay }}</span>
+        </div>
+      </div>
+
+      <div class="result-rates" aria-label="Exchange rate details">
+        <span class="rate-pill">{{ result.rateDisplay }}</span>
+        <span class="rate-separator" aria-hidden="true">·</span>
+        <span class="rate-pill">{{ result.inverseRateDisplay }}</span>
+      </div>
+
+      <p class="result-timestamp">
+        <img
+          src="assets/icons/clock.svg"
+          width="13"
+          height="13"
+          alt=""
+          aria-hidden="true"
+        />
+        Updated {{ result.dateDisplay }}
+      </p>
+    </div>
+  } @else if (!isLoading() && !error()) {
+    <div class="result-placeholder" aria-label="Awaiting conversion">
+      <p>Select currencies and enter an amount to see the result.</p>
+    </div>
+  }
+
+</div>

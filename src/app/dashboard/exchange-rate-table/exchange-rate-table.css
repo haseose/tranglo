@@ -1,0 +1,185 @@
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ── Loading state ───────────────────────────────────────────────── */
+.table-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary, #3b82f6);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* ── Error state ─────────────────────────────────────────────────── */
+.table-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem;
+  background: var(--color-danger-subtle, rgba(239, 68, 68, 0.08));
+  color: var(--color-danger, #ef4444);
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+/* Scrollable area — sticky header works inside this */
+.scroll-container {
+  max-height: 520px;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Material table base overrides ───────────────────────────────── */
+.rates-mat-table {
+  width: 100%;
+  background: transparent;
+}
+
+/* Header row — use surface-alt so it blends with card */
+.rates-mat-table .mat-mdc-header-row {
+  background: var(--color-surface-alt, #f0f2f5);
+}
+
+.rates-mat-table .mat-mdc-header-cell {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid var(--color-border);
+}
+
+/* Sort header arrow colour */
+.rates-mat-table .mat-sort-header-arrow {
+  color: var(--color-primary);
+}
+
+/* Body rows */
+.rates-mat-table .mat-mdc-row {
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.1s;
+}
+
+.rates-mat-table .mat-mdc-row:hover {
+  background: var(--color-hover, rgba(59, 130, 246, 0.05));
+}
+
+.rates-mat-table .mat-mdc-row:last-child {
+  border-bottom: none;
+}
+
+.rates-mat-table .mat-mdc-cell {
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  padding: 0.65rem 1rem;
+}
+
+/* ── Right-aligned cells ─────────────────────────────────────────── */
+.cell-right {
+  text-align: right !important;
+  justify-content: flex-end;
+}
+
+/* ── Currency badge ──────────────────────────────────────────────── */
+.currency-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  background: var(--color-primary-subtle, rgba(59, 130, 246, 0.1));
+  color: var(--color-primary, #3b82f6);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Mono', monospace;
+}
+
+/* ── Name cell ───────────────────────────────────────────────────── */
+.td-name {
+  color: var(--color-text-secondary);
+}
+
+/* ── Rate cell ───────────────────────────────────────────────────── */
+.td-rate {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Mono', monospace;
+}
+
+/* ── Comparison cell ─────────────────────────────────────────────── */
+.comparison-text {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-family: ui-monospace, 'Cascadia Code', 'Fira Mono', monospace;
+}
+
+/* ── Empty row ───────────────────────────────────────────────────── */
+.td-empty {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.empty-message {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ── Footer: count + paginator ───────────────────────────────────── */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 0.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.result-count {
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+  padding: 0.5rem 0.5rem;
+}
+
+/* Paginator colour overrides */
+.mat-mdc-paginator {
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.mat-mdc-paginator .mat-mdc-select-value,
+.mat-mdc-paginator .mat-mdc-paginator-range-label {
+  color: var(--color-text-secondary);
+}
+

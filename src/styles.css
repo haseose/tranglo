@@ -1,1 +1,336 @@
-/* You can add global styles to this file, and also import other style files */
+/* ============================================================
+   CSS Custom Properties — Light Theme (default)
+   ============================================================ */
+:root,
+[data-theme="light"] {
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f0f2f5;
+  --color-border: #e2e8f0;
+  --color-text-primary: #1a202c;
+  --color-text-secondary: #4a5568;
+  --color-text-muted: #718096;
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-primary-subtle: #eff6ff;
+  --color-success: #22c55e;
+  --color-success-bg: #f0fdf4;
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fffbeb;
+  --color-warning-text: #92400e;
+  --color-danger: #ef4444;
+  --color-hover: #f7fafc;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+/* ============================================================
+   Dark Theme
+   ============================================================ */
+[data-theme="dark"] {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-alt: #263043;
+  --color-border: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-primary-subtle: #1e3a5f;
+  --color-success: #4ade80;
+  --color-success-bg: #052e16;
+  --color-warning: #fbbf24;
+  --color-warning-bg: #2d1b00;
+  --color-warning-text: #fde68a;
+  --color-danger: #f87171;
+  --color-hover: #263043;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   Reset & Base
+   ============================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  text-decoration: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.btn-outline:hover {
+  background: var(--color-hover);
+}
+
+.spinner {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.page-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Skip to main content */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 999;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ============================================================
+   Angular Material overrides — Dark Theme
+   ============================================================ */
+
+/*
+ * Angular Material 17+ uses --mat-sys-* system tokens as fallbacks.
+ * These use CSS light-dark() tied to browser color-scheme, not our
+ * data-theme attribute. Override them first so all downstream tokens
+ * resolve correctly.
+ */
+[data-theme="dark"] {
+  --mat-sys-on-surface-variant: var(--color-text-secondary);
+  --mat-sys-on-surface: var(--color-text-primary);
+  --mat-sys-primary: var(--color-primary);
+  --mat-sys-surface: var(--color-surface);
+  --mat-sys-surface-variant: var(--color-surface-alt);
+  --mat-sys-outline: var(--color-border);
+  --mat-sys-outline-variant: var(--color-border);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-error: var(--color-danger);
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-on-error-container: var(--color-danger);
+  --mat-sys-secondary: var(--color-primary);
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-secondary-container: var(--color-primary-subtle);
+  --mat-sys-on-secondary-container: var(--color-text-primary);
+}
+
+/* ── mat-form-field (outlined) — explicit token names for v17+ ── */
+[data-theme="dark"] {
+  --mat-form-field-outlined-label-text-color: var(--color-text-secondary);
+  --mat-form-field-outlined-focus-label-text-color: var(--color-primary);
+  --mat-form-field-outlined-hover-label-text-color: var(--color-text-primary);
+  --mat-form-field-outlined-disabled-label-text-color: var(--color-text-muted);
+  --mat-form-field-outlined-error-label-text-color: var(--color-danger);
+  --mat-form-field-outlined-error-focus-label-text-color: var(--color-danger);
+  --mat-form-field-outlined-error-hover-label-text-color: var(--color-danger);
+
+  /* filled variant */
+  --mat-form-field-filled-label-text-color: var(--color-text-secondary);
+  --mat-form-field-filled-focus-label-text-color: var(--color-primary);
+  --mat-form-field-filled-hover-label-text-color: var(--color-text-primary);
+  --mat-form-field-filled-disabled-label-text-color: var(--color-text-muted);
+
+  /* general */
+  --mat-form-field-container-text-color: var(--color-text-primary);
+  --mat-form-field-label-text-color: var(--color-text-secondary);
+  --mat-form-field-subscript-text-color: var(--color-text-muted);
+
+  /* legacy mdc tokens (kept for compatibility) */
+  --mdc-outlined-text-field-label-text-color: var(--color-text-secondary);
+  --mdc-outlined-text-field-focus-label-text-color: var(--color-primary);
+  --mdc-outlined-text-field-disabled-label-text-color: var(--color-text-muted);
+  --mdc-outlined-text-field-input-text-color: var(--color-text-primary);
+  --mdc-outlined-text-field-disabled-input-text-color: var(--color-text-muted);
+  --mdc-outlined-text-field-outline-color: var(--color-border);
+  --mdc-outlined-text-field-hover-outline-color: var(--color-text-muted);
+  --mdc-outlined-text-field-focus-outline-color: var(--color-primary);
+  --mdc-outlined-text-field-disabled-outline-color: var(--color-border);
+  --mdc-outlined-text-field-caret-color: var(--color-primary);
+  --mdc-filled-text-field-label-text-color: var(--color-text-secondary);
+  --mdc-filled-text-field-focus-label-text-color: var(--color-primary);
+  --mdc-filled-text-field-input-text-color: var(--color-text-primary);
+  --mdc-filled-text-field-container-color: var(--color-surface-alt);
+  --mdc-filled-text-field-active-indicator-color: var(--color-border);
+  --mdc-filled-text-field-hover-active-indicator-color: var(--color-text-muted);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--color-primary);
+}
+
+/* ── mat-select ── */
+[data-theme="dark"] {
+  --mat-select-trigger-text-color: var(--color-text-primary);
+  --mat-select-enabled-trigger-text-color: var(--color-text-primary);
+  --mat-select-disabled-trigger-text-color: var(--color-text-muted);
+  --mat-select-placeholder-text-color: var(--color-text-muted);
+  --mat-select-enabled-arrow-color: var(--color-text-secondary);
+  --mat-select-disabled-arrow-color: var(--color-text-muted);
+  --mat-select-focused-arrow-color: var(--color-primary);
+  --mat-select-invalid-arrow-color: var(--color-danger);
+  --mat-select-panel-background-color: var(--color-surface);
+}
+
+/* ── mat-option (renders in CDK overlay at body level) ── */
+[data-theme="dark"] {
+  --mat-option-label-text-color: var(--color-text-primary);
+  --mat-option-selected-state-label-text-color: var(--color-primary);
+  --mat-option-hover-state-layer-color: var(--color-hover);
+  --mat-option-focus-state-layer-color: var(--color-hover);
+  --mat-option-selected-state-layer-color: var(--color-primary-subtle);
+  --mat-optgroup-label-text-color: var(--color-text-secondary);
+}
+
+/* ── mat-slide-toggle ── */
+[data-theme="dark"] {
+  --mat-slide-toggle-label-text-color: var(--color-text-primary);
+  --mat-slide-toggle-disabled-label-text-color: var(--color-text-muted);
+  --mdc-switch-unselected-track-color: var(--color-border);
+  --mdc-switch-unselected-focus-track-color: var(--color-border);
+  --mdc-switch-unselected-hover-track-color: var(--color-text-muted);
+  --mdc-switch-unselected-icon-color: var(--color-text-secondary);
+  --mdc-switch-unselected-handle-color: var(--color-surface-alt);
+  --mdc-switch-disabled-unselected-track-color: var(--color-border);
+  --mdc-switch-disabled-unselected-handle-color: var(--color-text-muted);
+}
+
+/* ── CDK overlay panel background (dropdown panels) ── */
+[data-theme="dark"] .cdk-overlay-pane .mat-mdc-select-panel,
+[data-theme="dark"] .mat-mdc-select-panel {
+  background-color: var(--color-surface) !important;
+}
+
+/* Direct text colour fixes for mat-select value & label */
+[data-theme="dark"] .mat-mdc-select-value-text,
+[data-theme="dark"] .mat-mdc-select-placeholder {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .mat-mdc-form-field-label,
+[data-theme="dark"] .mdc-floating-label {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .mat-mdc-icon-button,
+[data-theme="dark"] .mat-mdc-paginator-icon,
+[data-theme="dark"] .mat-mdc-paginator-range-label {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .mat-mdc-icon-button:disabled .mat-mdc-paginator-icon {
+  color: var(--color-text-muted);
+}
+
+[data-theme="dark"] .mat-sort-header-arrow > svg,
+[data-theme="dark"] .mat-sort-header-arrow [matSortHeaderIcon] {
+  color: var(--color-text-secondary);
+  fill: var(--color-text-secondary);
+}
