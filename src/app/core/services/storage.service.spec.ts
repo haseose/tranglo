@@ -69,11 +69,13 @@ type MockDb = ReturnType<typeof createMockDb>;
 
 /** Wire up openDB mock to return a working in-memory DB. */
 function setupWorkingIdb(mockDb: MockDb, oldVersion = 0) {
-  vi.mocked(openDB).mockImplementation((_name: string, _version?: number, options?: unknown) => {
-    const { upgrade } = (options ?? {}) as { upgrade?: (db: MockDb, old: number) => void };
-    upgrade?.(mockDb, oldVersion);
-    return Promise.resolve(mockDb as unknown as ReturnType<typeof openDB>);
-  });
+  vi.mocked(openDB).mockImplementation(
+    (_name: string, _version?: number, options?: unknown) => {
+      const { upgrade } = (options ?? {}) as { upgrade?: (db: MockDb, old: number) => void };
+      upgrade?.(mockDb, oldVersion);
+      return Promise.resolve(mockDb as unknown as ReturnType<typeof openDB>);
+    },
+  );
 }
 
 /** Wire up openDB mock to reject (simulates IDB unavailable). */
@@ -81,12 +83,6 @@ function setupBrokenIdb() {
   vi.mocked(openDB).mockRejectedValue(new Error('IDB unavailable'));
 }
 
-/** Force an already-created service to use a rejected dbPromise. */
-function breakIdbOnService(service: StorageService): void {
-  const rejected = Promise.reject(new Error('IDB unavailable'));
-  rejected.catch(() => { /* suppress */ });
-  (service as unknown as { dbPromise: Promise<unknown> }).dbPromise = rejected;
-}
 
 // ═════════════════════════════════════════════════════════════════════════════
 describe('StorageService', () => {
@@ -370,4 +366,4 @@ describe('StorageService', () => {
       expect(await service.getHistory('USD', 30)).toEqual([]);
     });
   });
-});
+});
