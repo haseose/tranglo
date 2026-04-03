@@ -61,8 +61,6 @@ jobs:
 
   # ─────────────────────────────────────────────
   # Job 3: Build
-  # Verifies the app compiles cleanly before deploy.
-  # Uses the placeholder environment.ts (committed).
   # ─────────────────────────────────────────────
   build:
     name: Build
@@ -89,15 +87,6 @@ jobs:
 
   # ─────────────────────────────────────────────
   # Job 4: Deploy to Vercel (master only)
-  #
-  # References the static "production" environment
-  # so GitHub shows "Reviewing deployments" and
-  # waits for your approval before proceeding.
-  #
-  # One-time setup:
-  #   Repo → Settings → Environments → New environment
-  #   Name: production
-  #   ✓ Required reviewers → add yourself → Save
   # ─────────────────────────────────────────────
   deploy:
     name: Deploy → Vercel
@@ -108,9 +97,9 @@ jobs:
       name: production
       url: ${{ steps.deploy.outputs.url }}
     env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN || vars.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID || vars.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID || vars.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
