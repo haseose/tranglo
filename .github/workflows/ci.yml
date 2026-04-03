@@ -60,13 +60,38 @@ jobs:
         run: npm run test:ci
 
   # ─────────────────────────────────────────────
-  # Job 3a: Deploy preview (develop / PRs)
+  # Job 3: Build
+  # Verifies the app compiles cleanly before deploy.
+  # Uses the placeholder environment.ts (committed).
+  # ─────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+  # ─────────────────────────────────────────────
+  # Job 4a: Deploy preview (develop / PRs)
   # Deploys immediately — no approval gate.
   # ─────────────────────────────────────────────
   deploy-preview:
     name: Deploy Preview → Vercel
     runs-on: ubuntu-latest
-    needs: test
+    needs: build
     if: github.ref != 'refs/heads/master' || github.event_name == 'pull_request'
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -99,7 +124,7 @@ jobs:
           echo "✅ Preview deployed to $URL"
 
   # ─────────────────────────────────────────────
-  # Job 3b: Deploy production (master only)
+  # Job 4b: Deploy production (master only)
   #
   # References the static "production" environment
   # so GitHub shows "Reviewing deployments" and
@@ -113,7 +138,7 @@ jobs:
   deploy-production:
     name: Deploy Production → Vercel
     runs-on: ubuntu-latest
-    needs: test
+    needs: build
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     environment:
       name: production
