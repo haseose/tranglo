@@ -81,6 +81,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create placeholder environment.prod.ts
+        run: cp src/environments/environment.ts src/environments/environment.prod.ts
+
       - name: Build
         run: npm run build
 
