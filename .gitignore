@@ -47,3 +47,5 @@ Thumbs.db
 # Angular environment files (contain secrets — use environment.example.ts as template)
 src/environments/environment.ts
 src/environments/environment.prod.ts
+.vercel
+.env*.local
