@@ -85,46 +85,7 @@ jobs:
         run: npm run build
 
   # ─────────────────────────────────────────────
-  # Job 4a: Deploy preview (develop / PRs)
-  # Deploys immediately — no approval gate.
-  # ─────────────────────────────────────────────
-  deploy-preview:
-    name: Deploy Preview → Vercel
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref != 'refs/heads/master' || github.event_name == 'pull_request'
-    env:
-      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Pull Vercel project settings
-        run: npx vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
-
-      - name: Build via Vercel CLI
-        run: npx vercel build --token=${{ env.VERCEL_TOKEN }}
-
-      - name: Deploy to Vercel (preview)
-        id: deploy
-        run: |
-          URL=$(npx vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }})
-          echo "url=$URL" >> $GITHUB_OUTPUT
-          echo "✅ Preview deployed to $URL"
-
-  # ─────────────────────────────────────────────
-  # Job 4b: Deploy production (master only)
+  # Job 4: Deploy to Vercel (master only)
   #
   # References the static "production" environment
   # so GitHub shows "Reviewing deployments" and
@@ -135,8 +96,8 @@ jobs:
   #   Name: production
   #   ✓ Required reviewers → add yourself → Save
   # ─────────────────────────────────────────────
-  deploy-production:
-    name: Deploy Production → Vercel
+  deploy:
+    name: Deploy → Vercel
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
@@ -166,10 +127,10 @@ jobs:
       - name: Build via Vercel CLI
         run: npx vercel build --prod --token=${{ env.VERCEL_TOKEN }}
 
-      - name: Deploy to Vercel (production)
+      - name: Deploy to Vercel
         id: deploy
         run: |
           URL=$(npx vercel deploy --prebuilt --prod --token=${{ env.VERCEL_TOKEN }})
           echo "url=$URL" >> $GITHUB_OUTPUT
-          echo "✅ Production deployed to $URL"
+          echo "✅ Deployed to $URL"
 
