@@ -50,7 +50,6 @@ export class DashboardPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Online status', this.isConnected());
     if (!this.exchangeRateService.isBrowser()) {
       this.loadCachedMeta();
       return;

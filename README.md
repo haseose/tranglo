@@ -10,7 +10,7 @@ A full-featured Angular 21 application for real-time currency exchange rates, hi
 
 | Feature | Details |
 |---|---|
-| **Real-Time Rates** | Fetches from ExchangeRate-API v6, auto-refreshes every 60 seconds |
+| **Real-Time Rates** | Fetches from ExchangeRate-API v6, auto-refreshes every 30 seconds |
 | **Historical Trends** | Line chart (Chart.js) for up to 3 currencies, daily / weekly / monthly toggle |
 | **Currency Converter** | Input amount + two currencies → live conversion result |
 | **Search & Filter** | Search by code or name, filter by specific currency |
@@ -57,7 +57,7 @@ export const environment = {
 ### Run Locally
 
 ```bash
-npm start
+ng serve
 # → http://localhost:4200
 ```
 
@@ -177,13 +177,13 @@ tranglo/
 ### Key Design Decisions
 
 - **Angular 21 Signals** — all state uses `signal()` + `computed()`, no BehaviorSubjects in components
-- **OnPush change detection** on every component for performance
-- **Standalone components** — no NgModules (Angular 21 default)
-- **Lazy loading** — all three feature areas load on demand via the router
-- **Real-time polling** — `WebSocketService` wraps `RxJS interval()`, shared via `shareReplay(1)` to prevent duplicate HTTP calls
+- **OnPush change detection** — all 12 components explicitly set `ChangeDetectionStrategy.OnPush`, meaning Angular only checks a component when its inputs change or a signal it reads emits a new value; this avoids unnecessary re-renders on every tick and is especially impactful when the rate table refreshes every 30 seconds
+- **Angular Material** — UI components (`MatTable`, `MatSort`, `MatPaginator`, `MatSelect`, `MatFormField`, `MatSlideToggle`) are sourced from `@angular/material` rather than built from scratch; this provides accessible, well-tested, industry-standard components out of the box and significantly reduces the amount of custom component code to maintain
+- **Standalone components** — no NgModules (Angular 21 default); each component declares its own `imports` array
+- **Lazy loading** — all three feature areas (dashboard, historical trends, converter) load on demand via the router to keep the initial bundle small
+- **WebSocket polling strategy** — `WebSocketService` wraps `RxJS interval()` to simulate a persistent real-time connection. For a use case like currency rates that only requires a single, lightweight API call at a fixed cadence, this approach is simpler to manage than a true WebSocket connection — there is no handshake overhead, no reconnection logic, and no server-side socket infrastructure needed. The 30-second interval is a deliberate sweet spot: currency rates change frequently and users expect near-live data, but refreshing faster than 30 seconds would push updates through every component in the tree too aggressively, causing noticeable UI churn and a laggy feel. 30 seconds gives every component enough time to complete its full change-detection cycle while still keeping the data fresh. The service also reacts to network state via an Angular `effect()` watching `NetworkStatusService.isOnline`: when the device goes offline the connection is marked as disconnected and any in-flight request is cancelled; when the network comes back the connection is immediately re-established and a fresh fetch is triggered — the interval timer stays alive throughout so the polling cadence does not drift on reconnect
 - **Historical data** — accumulated locally from IndexedDB snapshots (the free API tier has no historical endpoint)
-- **SSR-safe** — `isPlatformBrowser()` guards for IndexedDB, localStorage, `navigator.onLine`, and all other browser-only APIs
-- **Theming** — CSS custom properties on `<html data-theme="...">` with zero paint flicker
+- **Theming** — light/dark mode is driven by a `data-theme` attribute on `<html>` using CSS custom properties; Angular Material's theme tokens are overridden via SCSS, and the toggle state is persisted to localStorage so the preference survives a page reload
 
 ---
 
